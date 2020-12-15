@@ -4,30 +4,34 @@ import sys
 
 def main():
     file = open('site.txt', "r")
+    types = open('liste.txt', "r")
+    doc = open('data.csv', "w")
     line = file.readline()
-    
+    ty = types.readline()
+
     while line:
         line = line.replace('\n', '/')
+        ty = ty.replace('\n', '')
         try:
                 r = requests.get(line)
-                print(line)
                 soup = BeautifulSoup(r.content, "html.parser")
                 meta = soup.find_all('meta')
 
                 for tag in meta:
                         if 'name' in tag.attrs.keys() and tag.attrs['name'].strip().lower() in ['description', 'keywords']:
-                                print(tag.attrs['content'])
-                                write = open("data.txt", "a")
-                                line = line.replace('/', '\n')
-                                write.write(line)
-                                write.write(tag.attrs['content'])
-                                write.write("\n")
-                                write.close()
+                                print(line)
+                                doc.write('"' + line + '"' + ",")
+                                doc.write('"' + tag.attrs['content'] + '"' + ",")
+                                doc.write('"' + ty + '"' + "\n")
                 line = file.readline()
+                ty = types.readline()
         except:
                 line = file.readline()
-
+                ty = types.readline()
+                
     file.close()
+    types.close()
+    doc.close()
 
 if __name__ == '__main__':
     main()
