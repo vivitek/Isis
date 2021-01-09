@@ -10,3 +10,15 @@
   margin-top: 10em;
 }
 
+.result {
+  margin-top: 10em;
+  display: flex;
+  justify-content: center;
+}
+
+.result div {
+  width: 40%;
+  height: 5vh;
+  background-color: #3C67AF;
+  padding: 20px 0px;
+}
