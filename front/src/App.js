@@ -62,7 +62,7 @@ const App = () => {
       {category !== undefined && <div class="result">
           {category !== "" ?
             <div class="category">
-              <img alt="logo" src={`https://logo.clearbit.com/${url}`} />
+              <img alt="logo" src={`https://favicon.splitbee.io/?url=${url}`} />
               <h3>It seems that your site is a(n) {category} site</h3>
               <Button
                 style={{width: "200px"}}
