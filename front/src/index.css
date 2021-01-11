@@ -30,7 +30,7 @@ footer {
 
 header {
   height: 90px;
-  background-color: #3C67AF;
+  background-color: #3f51b5;
 }
 
 input {
@@ -45,6 +45,7 @@ input {
   height: 40px;
   width: 45%;
   color: white;
+  margin-bottom: 15px;
 }
 
 img {
@@ -54,8 +55,8 @@ img {
 }
 
 button {
+  margin-left: 20px;
   font-size: larger;
-  margin-top: 15px;
   width: 13%;
   min-width: 100px;
   color: #9b9b9b;
@@ -67,4 +68,16 @@ button {
 
 button:disabled{
   cursor: not-allowed;
+}
+
+select {
+  font-size: larger;
+  width: 13%;
+  margin: 0 10px;
+  min-width: 100px;
+  color: #9b9b9b;
+  height: 50px;
+  border: solid rgba(255,255,255,0.3) 1px;
+  background: transparent;
+  cursor:pointer;
 }
