@@ -17,7 +17,7 @@ print("Table created successfully........")
 
 cur.execute("""
     COPY site(url, category)
-    FROM '/home/dythic/Documents/xana/sites.csv'
+    FROM './sites.csv'
     DELIMITER ','
     CSV HEADER;
 """)
