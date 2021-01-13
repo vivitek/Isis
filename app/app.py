@@ -5,7 +5,7 @@ import psycopg2
 
 app=Flask(__name__)
 
-conn = psycopg2.connect("host=localhost dbname=postgres password=password user=user")
+conn = psycopg2.connect("host=localhost dbname=postgres password=password user=postgres")
 conn.autocommit = True
 cur = conn.cursor()
 cur.execute("""
@@ -17,8 +17,11 @@ cur.execute("""
 
 @app.route('/<url>')
 def isis(url):
-    # find db
-    return url
+    postgreSQL_select_Query = "SELECT category, url FROM site WHERE url = %s"
+    cur.execute(postgreSQL_select_Query, (url,))
+    result = cur.fetchall()
+    print(result[0])
+    return result[0]
 
 @app.route("/<url>", methods=["PATCH"])
 def reportError(url, category):

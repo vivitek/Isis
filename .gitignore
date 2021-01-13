@@ -132,6 +132,7 @@ pythonenv*
 
 # mkdocs documentation
 /site
+sites.csv
 
 # mypy
 .mypy_cache/
