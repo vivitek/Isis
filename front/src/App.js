@@ -50,18 +50,20 @@ const App = () => {
       <div id="search">
         <input value={url} onChange={(e) => {
           setUrl(e.target.value.toLowerCase())
+          if (category !== undefined)
+            setCategory(undefined)
         }} type="url" placeholder="Type your URL here"/><br/>
         <Button
-          disabled={!/^[a-z0-9\.]+\.[a-z]{2,}$/.test(url)}
+          disabled={!/^[a-z0-9.]+\.[a-z]{2,}$/.test(url)}
           onClick={submit}
           variant="contained"
           color="primary"
         >Search</Button>
       </div>
 
-      {category !== undefined && <div class="result">
+      {category !== undefined && <div className="result">
           {category !== "" ?
-            <div class="category">
+            <div className="category">
               <img alt="logo" src={`https://favicon.splitbee.io/?url=${url}`} />
               <h3>It seems that your site is a(n) {category} site</h3>
               <Button
@@ -74,7 +76,7 @@ const App = () => {
               >Report an error</Button>
             </div>
           :
-            <div class="category">
+            <div className="category">
               <h3>
                 This website enters in
                 <Select
