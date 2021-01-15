@@ -1,21 +1,30 @@
-version: '3'
+version: "3"
 services:
-    xana:
-        build: ./app
-        ports:
-            - "4000:4000"
-        depends_on:
-            - postgres
-    postgres:
-        image: postgres
-        volumes:
-           - postgres:/data/postgres
-        environment:
-            POSTGRES_USER: root
-            POSTGRES_PASSWORD: toor
-        ports:
-          - "5432:5432"
-        restart: on-failure
+  xana:
+    build: ./app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    env_file: xana.env
+  postgres:
+    image: postgres
+    volumes:
+      - postgres:/data/postgres
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+    ports:
+      - "5432:5432"
+    restart: on-failure
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
 
 volumes:
-    postgres: {}
+  postgres: {}
