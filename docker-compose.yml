@@ -17,7 +17,7 @@ services:
       POSTGRES_PASSWORD: toor
     ports:
       - "5432:5432"
-    restart: on-failure
+    restart: always
   adminer:
     image: adminer
     restart: always

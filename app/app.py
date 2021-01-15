@@ -6,9 +6,12 @@ import smtplib
 import ssl
 import os
 app = Flask(__name__)
-
-conn = psycopg2.connect("host={} dbname={} password={} user={}".format(os.getenv(
-    "POSTGRES_URL", "localhost"), os.getenv("POSTGRES_DB"), os.getenv("POSTGRES_PWD"), os.getenv("POSTGRES_USER")))
+try:
+    conn = psycopg2.connect("host={} dbname={} password={} user={}".format(os.getenv(
+        "POSTGRES_URL", "localhost"), os.getenv("POSTGRES_DB"), os.getenv("POSTGRES_PWD"), os.getenv("POSTGRES_USER")))
+except psycopg2.Error as err:
+    pritn("[-] Error psql: {}".format(err.pgerror))
+    quit(1)
 conn.autocommit = True
 cur = conn.cursor()
 
