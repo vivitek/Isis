@@ -2,13 +2,23 @@
 
 from flask import Flask
 import psycopg2
-import smtplib, ssl
-
+import smtplib
+import ssl
+import os
 app = Flask(__name__)
 
-conn = psycopg2.connect("host=localhost dbname=postgres password=Battle98* user=dythic")
+conn = psycopg2.connect("host={} dbname={} password={} user={}".format(os.getenv(
+    "POSTGRES_URL", "localhost"), os.getenv("POSTGRES_DB"), os.getenv("POSTGRES_PWD"), os.getenv("POSTGRES_USER")))
 conn.autocommit = True
 cur = conn.cursor()
+
+cur.execute("CREATE TABLE IF NOT EXISTS site(url CHAR(200) NOT NULL,category CHAR(200) NOT NULL,id INT PRIMARY KEY NOT NULL)")
+
+
+@app.route('/')
+def hello():
+    return "Hello, this is not a website"
+
 
 @app.route('/<url>')
 def isis(url):
@@ -17,6 +27,7 @@ def isis(url):
     result = cur.fetchall()
     print(result[0])
     return result[0]
+
 
 @app.route('/find/<category>')
 def sendCategory(category):
@@ -31,10 +42,11 @@ def sendCategory(category):
     cur.execute(postgreSQL_select_Query, (category,))
     result = cur.fetchall()
     site = result[0][0]
-    while x <= max_count - 1 :
+    while x <= max_count - 1:
         site = site + ", " + result[x][0]
         x = x + 1
     return site
+
 
 @app.route("/<url>/<category>")
 def reportError(url, category):
@@ -49,8 +61,10 @@ def reportError(url, category):
     context = ssl.create_default_context()
     with smtplib.SMTP_SSL(smtp_address, smtp_port, context=context) as server:
         server.login(email_address, email_password)
-        server.sendmail(email_address, email_receiver, 'le contenu de l\'e-mail')
+        server.sendmail(email_address, email_receiver,
+                        'le contenu de l\'e-mail')
     return url
+
 
 if __name__ == '__main__':
     app.run()
