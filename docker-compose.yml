@@ -12,6 +12,7 @@ services:
     volumes:
       - postgres:/data/postgres
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sites.csv:/app/sites.csv
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: toor
