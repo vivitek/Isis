@@ -1,19 +1,21 @@
 version: '3'
 services:
-    isis:
+    xana:
         build: ./app
         ports:
             - "4000:4000"
         depends_on:
-            - redis
-            - mysql
-    redis:
-        image: redis
-        ports:
-            - "5372:5372"
-    mysql:
-        image: mysql:5.7
-        ports:
-            - "7392:7392"
+            - postgres
+    postgres:
+        image: postgres
+        volumes:
+           - postgres:/data/postgres
         environment:
-            MYSQL_ROOT_PASSWORD: toor
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: toor
+        ports:
+          - "5432:5432"
+        restart: on-failure
+
+volumes:
+    postgres: {}
