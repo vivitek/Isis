@@ -55,8 +55,8 @@ class MyClient(discord.Client):
     async def on_message(self, message: discord.Message):
         if str(message.author.id) != HOOK_ID or str(message.channel.id) != XANA_CHANNEL:
             return
-        await message.add_reaction("✅")
-        await message.add_reaction("❌")
+        # await message.add_reaction("✅")
+        # await message.add_reaction("❌")
 
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent):
         if str(payload.user_id) == HOOK_ID or str(payload.user_id) == self.user.id or payload.channel_id != int(XANA_CHANNEL):
@@ -69,10 +69,8 @@ class MyClient(discord.Client):
             await message.remove_reaction(payload.emoji, member)
         reaction: discord.Reaction = get(
             message.reactions, emoji=payload.emoji.name)
-        if reaction and reaction.count == 3:
-            print(message.embeds)
+        if reaction and reaction.count == 2:
             data_embed = message.embeds[0].to_dict()
-            print(data_embed)
             url = None
             category = None
             for f in data_embed["fields"]:
@@ -80,6 +78,8 @@ class MyClient(discord.Client):
                     url = f["value"]
                 if f["name"] == "Category":
                     category = f["value"]
+            if (payload.emoji.name == "✅"):
+                add_record(url, category)
             embed = await create_embed(url, category, message.reactions)
             await self.channel.send(embed=embed)
             await message.delete()
