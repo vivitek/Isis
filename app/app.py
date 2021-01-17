@@ -4,9 +4,11 @@ from flask import Flask
 import psycopg2
 import smtplib
 import ssl
+import requests
 import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
 app = Flask(__name__)
 try:
     conn = psycopg2.connect("host={} dbname={} password={} user={}".format(os.getenv(
@@ -19,9 +21,11 @@ cur = conn.cursor()
 
 cur.execute("CREATE TABLE IF NOT EXISTS site(url CHAR(200) NOT NULL, category CHAR(200) NOT NULL, id SERIAL PRIMARY KEY NOT NULL)")
 
+
 @app.route('/')
 def hello():
     return "Hello, this is not a website"
+
 
 @app.route('/<url>')
 def xana(url):
@@ -32,11 +36,12 @@ def xana(url):
         return result[0]
     return "Error 400 bad URL"
 
+
 @app.route('/find/<category>')
 def sendCategory(category):
     x = 1
     site = ""
-    max_count = 0  
+    max_count = 0
     if (check_in_list(category)):
         postgreSQL_select_Count = "SELECT COUNT(category) FROM site WHERE category = %s"
         cur.execute(postgreSQL_select_Count, (category,))
@@ -52,6 +57,7 @@ def sendCategory(category):
         return site
     else:
         return "Error 400 category not found"
+
 
 @app.route("/<url>/<category>")
 def reportError(url, category):
@@ -72,12 +78,12 @@ def reportError(url, category):
         text = '''
             Bonjour,
 
-            Un nouvelle utilisateur a proposer une modification/nouvelle catégorie pour un site:
+            Un nouveau utilisateur a proposé une modification/nouvelle catégorie pour le site:
             {} : {}
-            Vous pouvez l'ajouter a la database de xana.
+            Vous pouvez l'ajouter à la base de données de xana.
 
-            Bonne journée a vous,
-            la joyeuse team de ViVi
+            Bonne journée à vous,
+            la joyeuse équipe de ViVi
         '''.format(url, category)
 
         texte_mine = MIMEText(text, 'plain')
@@ -88,25 +94,27 @@ def reportError(url, category):
         with smtplib.SMTP_SSL(smtp_address, smtp_port, context=context) as server:
             server.login(email_address, email_password)
             server.sendmail(email_address, email_receiver, message.as_string())
+        notify_discord(url, category)
         return url
     else:
         return "Error 400 category"
 
+
 def check_in_list(category):
     sites = [
-        "search engine", 
-        "entertainment", 
-        "mail manager", 
-        "merchandising", 
-        "social network", 
-        "information", 
-        "working tool", 
-        "bank / payment method", 
-        "pornography", 
-        "online storage", 
-        "education", 
-        "government / public service", 
-        "religion", 
+        "search engine",
+        "entertainment",
+        "mail manager",
+        "merchandising",
+        "social network",
+        "information",
+        "working tool",
+        "bank / payment method",
+        "pornography",
+        "online storage",
+        "education",
+        "government / public service",
+        "religion",
         "health"
     ]
     x = 0
@@ -116,6 +124,30 @@ def check_in_list(category):
             return True
         x = x + 1
     return False
+
+
+def notify_discord(url, category):
+    requests.post(os.getenv("HOOK_URL"), {
+        "content": "Only react with ✅ or ❌",
+        "embeds": [{
+            "title": "Categorization Request",
+            "description": "Someone submitted a request",
+            "image": {
+                "url": "https://favicon.splitbee.io/?url={}".format(url)
+            },
+            "fields": [{
+                "name": "Url",
+                "value": url
+            }, {
+                "name": "Category",
+                "value": category
+            }],
+            "footer": {
+                "text": "Made in ViVi"
+            }
+        }]
+    })
+
 
 if __name__ == '__main__':
     app.run()
