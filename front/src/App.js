@@ -22,8 +22,8 @@ const App = () => {
   };
 
   const report = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/${url}`, {
-      method: "PATCH",
+    fetch(`${process.env.REACT_APP_API_URL}/report`, {
+      method: "POST",
       headers: { "Content-type": "application/json; charset=UTF-8" },
       body: JSON.stringify({ url, category: reportValue }),
     }).then(() => {
