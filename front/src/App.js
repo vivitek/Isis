@@ -111,9 +111,20 @@ const App = () => {
                     setReportValue(e.target.value);
                   }}
                 >
+                  <MenuItem value="search engine">search engine</MenuItem>
                   <MenuItem value="entertainment">entertainment</MenuItem>
-                  <MenuItem value="education">education</MenuItem>
+                  <MenuItem value="mail manager">mail manager</MenuItem>
+                  <MenuItem value="merchandising">merchandising</MenuItem>
+                  <MenuItem value="social network">social network</MenuItem>
                   <MenuItem value="information">information</MenuItem>
+                  <MenuItem value="working tool">working tool</MenuItem>
+                  <MenuItem value="bank / payment method">bank / payment method</MenuItem>
+                  <MenuItem value="pornography">pornography</MenuItem>
+                  <MenuItem value="online storage">online storage</MenuItem>
+                  <MenuItem value="education">education</MenuItem>
+                  <MenuItem value="government / public service">government / public service</MenuItem>
+                  <MenuItem value="religion">religion</MenuItem>
+                  <MenuItem value="health">health</MenuItem>
                 </Select>
                 category
               </h3>
