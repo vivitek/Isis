@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from flask import Flask
+from flask import Flask, request
 import psycopg2
 import smtplib
 import ssl
@@ -8,8 +8,10 @@ import requests
 import os
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 try:
     conn = psycopg2.connect("host={} dbname={} password={} user={}".format(os.getenv(
         "POSTGRES_URL", "localhost"), os.getenv("POSTGRES_DB"), os.getenv("POSTGRES_PWD"), os.getenv("POSTGRES_USER")))
@@ -19,7 +21,7 @@ except psycopg2.Error as err:
 conn.autocommit = True
 cur = conn.cursor()
 
-cur.execute("CREATE TABLE IF NOT EXISTS site(url CHAR(200) NOT NULL, category CHAR(200) NOT NULL, id SERIAL PRIMARY KEY NOT NULL)")
+cur.execute("CREATE TABLE IF NOT EXISTS site(url CHAR(200) NOT NULL, category CHAR(200) NOT NULL, id SERIAL PRIMARY KEY)")
 
 
 @app.route('/')
@@ -33,8 +35,11 @@ def xana(url):
     cur.execute(postgreSQL_select_Query, (url,))
     result = cur.fetchall()
     if result:
-        return result[0]
-    return "Error 400 bad URL"
+        return {"category": result[0][0]}
+    return {
+        "message":"No result found for {}".format(url),
+        "category":""
+    }, 400
 
 
 @app.route('/find/<category>')
@@ -50,17 +55,19 @@ def sendCategory(category):
         postgreSQL_select_Query = "SELECT url, category FROM site WHERE category = %s"
         cur.execute(postgreSQL_select_Query, (category,))
         result = cur.fetchall()
-        site = result[0][0]
-        while x <= max_count - 1:
-            site = site + ", " + result[x][0]
-            x = x + 1
-        return site
+        data = [x for i in result]
+        return {"site":result}
     else:
-        return "Error 400 category not found"
+        return {
+            "message":"Category not found: {}".format(category)
+        }, 400
 
 
-@app.route("/<url>/<category>")
-def reportError(url, category):
+@app.route("/report", methods=["POST"])
+def reportError():
+    content = request.json
+    url = content["url"]
+    category = content["category"]
     if check_in_list(category):
         smtp_address = "{}".format(os.getenv("STMP_ADDRESS"))
         smtp_port = 465
@@ -95,9 +102,11 @@ def reportError(url, category):
             server.login(email_address, email_password)
             server.sendmail(email_address, email_receiver, message.as_string())
         notify_discord(url, category)
-        return url
+        return {"url":url}
     else:
-        return "Error 400 category"
+        return {
+            "message": "Something went wrong"
+        }, 500
 
 
 def check_in_list(category):
@@ -117,37 +126,30 @@ def check_in_list(category):
         "religion",
         "health"
     ]
-    x = 0
-    while x <= 13:
-        if (sites[x] == category):
-            print(sites[x] + category)
-            return True
-        x = x + 1
-    return False
+    return category in sites
 
 
 def notify_discord(url, category):
-    requests.post(os.getenv("HOOK_URL"), {
-        "content": "Only react with ✅ or ❌",
-        "embeds": [{
-            "title": "Categorization Request",
-            "description": "Someone submitted a request",
-            "image": {
-                "url": "https://favicon.splitbee.io/?url={}".format(url)
-            },
-            "fields": [{
-                "name": "Url",
-                "value": url
-            }, {
-                "name": "Category",
-                "value": category
-            }],
-            "footer": {
-                "text": "Made in ViVi"
-            }
-        }]
+    res = requests.post(os.getenv("HOOK_URL"), json={
+	"content":"Only react with ✅ or ❌",
+	"embeds": [{
+		"title": "Categorization Request",
+		"description": "Someone submitted a request",
+		"image": {
+			"url": "https://favicon.splitbee.io/?url=https://facebook.com"
+		},
+		"fields": [{
+			"name": "Url",
+			"value": url
+		}, {
+			"name": "Category",
+			"value": category
+		}],
+		"footer": {
+			"text": "Made in ViVi"
+		}
+	}]
     })
 
-
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=4000)

@@ -1,6 +1,4 @@
 CREATE USER xana WITH PASSWORD 'xana2020';
-CREATE USER docker WITH PASSWORD 'docker';
 CREATE DATABASE xanadb;
 GRANT ALL PRIVILEGES ON DATABASE xanadb TO xana;
-GRANT ALL PRIVILEGES ON DATABASE xanadb TO docker;
 GRANT pg_read_server_files TO xana;
