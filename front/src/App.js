@@ -18,7 +18,6 @@ const App = () => {
       .then(async (res) => res.json())
       .then((res) => {
         setCategory(res.category);
-        console.log(res.category)
         if (res.category === "") {
           toast("Nothing found!", {
             type: "error",
