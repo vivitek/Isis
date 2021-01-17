@@ -14,7 +14,7 @@ const App = () => {
   const [category, setCategory] = useState(undefined);
 
   const submit = () => {
-    fetch(`http://localhost:8080/${url}`)
+    fetch(`${process.env.REACT_APP_API_URL}/${url}`)
       .then(async (res) => res.json())
       .then((res) => {
         setCategory(res.category);
@@ -22,7 +22,7 @@ const App = () => {
   };
 
   const report = () => {
-    fetch(`http://localhost:8080/${url}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/${url}`, {
       method: "PATCH",
       headers: { "Content-type": "application/json; charset=UTF-8" },
       body: JSON.stringify({ url, category: reportValue }),
@@ -48,11 +48,16 @@ const App = () => {
       </header>
 
       <div id="search">
-        <input value={url} onChange={(e) => {
-          setUrl(e.target.value.toLowerCase())
-          if (category !== undefined)
-            setCategory(undefined)
-        }} type="url" placeholder="Type your URL here"/><br/>
+        <input
+          value={url}
+          onChange={(e) => {
+            setUrl(e.target.value.toLowerCase());
+            if (category !== undefined) setCategory(undefined);
+          }}
+          type="url"
+          placeholder="Type your URL here"
+        />
+        <br />
         <Button
           disabled={!/^[a-z0-9.]+\.[a-z]{2,}$/.test(url)}
           onClick={submit}
