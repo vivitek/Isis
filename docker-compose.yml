@@ -3,7 +3,7 @@ services:
   xana:
     build: ./app
     ports:
-      - "4000:4000"
+      - "8888:4000"
     depends_on:
       - postgres
     env_file: xana.env
