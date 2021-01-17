@@ -18,15 +18,16 @@ const App = () => {
       .then(async (res) => res.json())
       .then((res) => {
         setCategory(res.category);
-      }).catch(() => {
-        toast("Nothing found!", {
-          type: "error",
-          position: toast.POSITION.BOTTOM_RIGHT,
-          style: {
-            backgroundColor: "#a83232",
-            width: "450px",
-          },
-        });
+        if (category === "") {
+          toast("Nothing found!", {
+            type: "error",
+            position: toast.POSITION.BOTTOM_RIGHT,
+            style: {
+              backgroundColor: "#a83232",
+              width: "450px",
+            },
+          });
+        }
       });
   };
 
