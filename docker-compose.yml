@@ -1,19 +1,37 @@
-version: '3'
+version: "3"
 services:
-    isis:
-        build: ./app
-        ports:
-            - "4000:4000"
-        depends_on:
-            - redis
-            - mysql
-    redis:
-        image: redis
-        ports:
-            - "5372:5372"
-    mysql:
-        image: mysql:5.7
-        ports:
-            - "7392:7392"
-        environment:
-            MYSQL_ROOT_PASSWORD: toor
+  xana:
+    build: ./app
+    ports:
+      - "4000:4000"
+    depends_on:
+      - postgres
+    env_file: xana.env
+  postgres:
+    image: postgres
+    volumes:
+      - postgres:/data/postgres
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./sites.csv:/app/sites.csv
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: toor
+    ports:
+      - "5432:5432"
+    restart: always
+  bot:
+    build: ./bot
+    depends_on:
+      - postgres
+    env_file: bot.env
+    restart: always
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - postgres
+    ports:
+      - 8080:8080
+
+volumes:
+  postgres: {}

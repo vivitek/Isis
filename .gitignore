@@ -1,6 +1,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,flask
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,flask
 
+*.csv
+*.env
+
 ### Flask ###
 instance/*
 !instance/.gitignore
@@ -130,6 +133,7 @@ pythonenv*
 
 # mkdocs documentation
 /site
+sites.csv
 
 # mypy
 .mypy_cache/
@@ -207,3 +211,4 @@ dmypy.json
 # profiling data
 
 # End of https://www.toptal.com/developers/gitignore/api/python,flask
+*.env

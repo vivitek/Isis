@@ -1,10 +1,10 @@
-# Isis
+# Xana
 
 # Présentation de l'outil
 
 ---
 
-Isis est un outil qui a pour but de catégoriser les sites internet visités par les utilisateurs. Cella permettra au utilisateur de pouvoir mieux visualisé quel site sont visité et de pouvoir bloqué des catégorie entière. Par exemple, si un utilisateur se rend sur le site YouTube, l'administrateur du réseau aura la capacité de voir qu'un site de Streaming est consulté dans son réseau, il pourra donc soir bloqué le site en question, soit bloqué tous les sites de la catégorie Streaming. Nous avons donc développé l'outil Isis qui serra une intelligence artificielle qui aura la capacité de reconnaître les catégories de site en fonction de leur Metadata.
+Xana est un outil qui a pour but de catégoriser les sites internet visités par les utilisateurs. Cella permettra au utilisateur de pouvoir mieux visualisé quel site sont visité et de pouvoir bloqué des catégorie entière. Par exemple, si un utilisateur se rend sur le site YouTube, l'administrateur du réseau aura la capacité de voir qu'un site de Streaming est consulté dans son réseau, il pourra donc soir bloqué le site en question, soit bloqué tous les sites de la catégorie Streaming. Nous avons donc développé l'outil Xana qui serra une intelligence artificielle qui aura la capacité de reconnaître les catégories de site en fonction de leur Metadata.
 
 # Scraper
 
