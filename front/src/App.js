@@ -48,23 +48,11 @@ const App = () => {
       </header>
 
       <div id="search">
-<<<<<<< Updated upstream
         <input value={url} onChange={(e) => {
           setUrl(e.target.value.toLowerCase())
           if (category !== undefined)
             setCategory(undefined)
         }} type="url" placeholder="Type your URL here"/><br/>
-=======
-        <input
-          value={url}
-          onChange={(e) => {
-            setUrl(e.target.value.toLowerCase());
-          }}
-          type="url"
-          placeholder="Type your URL here"
-        />
-        <br />
->>>>>>> Stashed changes
         <Button
           disabled={!/^[a-z0-9.]+\.[a-z]{2,}$/.test(url)}
           onClick={submit}
@@ -75,16 +63,10 @@ const App = () => {
         </Button>
       </div>
 
-<<<<<<< Updated upstream
-      {category !== undefined && <div className="result">
-          {category !== "" ?
-            <div className="category">
-=======
       {category !== undefined && (
         <div class="result">
           {category !== "" ? (
             <div class="category">
->>>>>>> Stashed changes
               <img alt="logo" src={`https://favicon.splitbee.io/?url=${url}`} />
               <h3>It seems that your site is a(n) {category} site</h3>
               <Button
@@ -98,13 +80,8 @@ const App = () => {
                 Report an error
               </Button>
             </div>
-<<<<<<< Updated upstream
-          :
-            <div className="category">
-=======
           ) : (
             <div class="category">
->>>>>>> Stashed changes
               <h3>
                 This website enters in
                 <Select
