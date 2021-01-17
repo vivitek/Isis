@@ -24,7 +24,7 @@ const App = () => {
             type: "error",
             position: toast.POSITION.BOTTOM_RIGHT,
             style: {
-              backgroundColor: "#a83232",
+              backgroundColor: "#b53f3f",
               width: "450px",
             },
           });
