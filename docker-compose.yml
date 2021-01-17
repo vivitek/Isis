@@ -19,6 +19,12 @@ services:
     ports:
       - "5432:5432"
     restart: always
+  bot:
+    build: ./bot
+    depends_on:
+      - postgres
+    env_file: bot.env
+    restart: always
   adminer:
     image: adminer
     restart: always
