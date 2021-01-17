@@ -18,12 +18,22 @@ const App = () => {
       .then(async (res) => res.json())
       .then((res) => {
         setCategory(res.category);
+        if (res.category === "") {
+          toast("Nothing found!", {
+            type: "error",
+            position: toast.POSITION.BOTTOM_RIGHT,
+            style: {
+              backgroundColor: "#b53f3f",
+              width: "450px",
+            },
+          });
+        }
       });
   };
 
   const report = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/${url}`, {
-      method: "PATCH",
+    fetch(`${process.env.REACT_APP_API_URL}/report`, {
+      method: "POST",
       headers: { "Content-type": "application/json; charset=UTF-8" },
       body: JSON.stringify({ url, category: reportValue }),
     }).then(() => {
@@ -33,7 +43,7 @@ const App = () => {
         style: {
           backgroundColor: "#3fb58f",
           width: "450px",
-        },
+        }
       });
       setCategory(undefined);
       setUrl("");
